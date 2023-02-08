@@ -1,22 +1,3 @@
-let petSalon ={
-    name:"The Fashion Pet",
-    phone:"555-555-555",
-    workingHours:{
-        open:"9:00 am",
-        close:"9:00 pm"
-    },
-    address:{
-        street:"Palm ave",
-        zip:"22345",
-        city:"San Diego"
-    },
-    pets:[]
-}
-//name, age, gender, breed, service
-function displayFooterInfo(){
-    document.getElementById("footer").innerHTML=`<label>${petSalon.name} it opens at ${petSalon.workingHours.open} to ${petSalon.workingHours.close}</label>`;
-}
-
 //this is the constructor
 function Pet(n,a,g,b,s){
     this.name = n;
@@ -32,18 +13,33 @@ let inputGender = document.getElementById("txtGender");
 let inputBreed = document.getElementById("txtBreed");
 let inputService = document.getElementById("txtService");
 
+function isValid(aPet){
+    let valid=true;// we start assuming that the pet is valid
+    if(aPet.name === ""){
+        //if i get here the pet is not valid
+        valid=false;
+        inputName.classList.add("input-alert-error");
+    }
+    if(aPet.service===""){
+        valid=false;
+    }
+    // add validation for contact phone and owner name
+
+    return valid;
+}
+
 function register(){
-    console.log("Register a new pet");
-    console.log(inputName.value,inputAge.value,inputGender.value,inputBreed.value,inputService.value);
     //create a new pet
     let newPet = new Pet(inputName.value,inputAge.value,inputGender.value,inputBreed.value,inputService.value);
-    // display the pet on the console
-    console.log(newPet);
-    //push the pet into the array
-    petSalon.pets.push(newPet);
-    //display the number of registered pets
-    updateInfo();
-    clearForm();
+    //validation 
+    if(isValid(newPet)===true){
+        //push the pet into the array
+        petSalon.pets.push(newPet);
+        //display the number of registered pets
+        updateInfo();
+        displayPetCards();
+        clearForm();
+    }
 }
 function updateInfo(){
     document.getElementById("numberOfPets").innerHTML=petSalon.pets.length;
@@ -55,11 +51,9 @@ function clearForm(){
    inputGender.value="";
    inputBreed.value="";
    inputService.value="";
-
 }
 function init(){
     //events
-
     //call the funcitons
     displayFooterInfo();
     //create obj
@@ -67,6 +61,7 @@ function init(){
     let scrappy = new Pet("Scrappy",50,"Male","Mixed","Vaccines");
     petSalon.pets.push(scooby,scrappy);//adding the pets into the array
     updateInfo();
+    displayPetCards();
 }
 window.onload=init;//wait to render the html
 
